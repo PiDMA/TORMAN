@@ -6,9 +6,19 @@ const cors = require('cors');
 
 const app = express();
 
-const PORT = process.env.PORT || 5000;
+//Middlewares
+app.use(express.json())
+app.use(express.urlencoded({extended: false}))
+app.use(bodyParser.json())
 
-mongoose.connect("mongodb+srv://superDavid:1234@cluster0.plxa2pp.mongodb.net/torman-app?retryWrites=true&w=majority")
+//Routes
+app.get('/', (req, res) => {
+    res.send('Torman home page');
+});
+
+//Connecting
+const PORT = process.env.PORT || 5000;
+mongoose.connect(process.env.MONGODB_URI)
     .then(() => app.listen(PORT, () => {
         console.log(`Server running on port: ${PORT}`);
     }))
