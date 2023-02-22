@@ -20,18 +20,30 @@ const userSchema = mongoose.Schema({
     password: {
         type: String,
         required: [true, "Please enter a password"],
-        minglength: [6, "Minimum password length is 6 characters"],
-        maxLength: [28 , "Password cannot exceed 28 characters"]
+        minlength: [6, "Minimum password length is 6 characters"]
     },
 
-    photo: {
-        type: String,
-        required: [true, "Please enter a photo"],
-        default : "https://i.bb.co/4pDNDk1/avatar.png"
-    },  
+    // photo: {
+    //     type: String,
+    //     required: [true, "Please enter a photo"],
+    //     default : "https://i.bb.co/4pDNDk1/avatar.png"
+    // },  
 }, {
     timestamps: true
 })
+
+//Encrypt 
+userSchema.pre("save", async function (next) {
+    if (!this.isModified("password")) {
+      return next();
+    }
+  
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(this.password, salt);
+    this.password = hashedPassword;
+    next();
+});
 
 const User = mongoose.model("User", userSchema)
 module.exports = User

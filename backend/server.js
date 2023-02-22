@@ -4,22 +4,30 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
+const errorHandler = require('./middleWare/errorMiddleWare');
+const cookieParser = require("cookie-parser")
 
 //routes
 const userRoute = require('./routes/userRoute');
 
-//Routes middleware
-app.use("/api/users/", userRoute)
 
 //Middlewares
 app.use(express.json())
+app.use(cookieParser())
 app.use(express.urlencoded({extended: false}))
 app.use(bodyParser.json())
+
+//Routes middleware
+app.use("/api/users", userRoute)
 
 //Routes
 app.get('/', (req, res) => {
     res.send('Torman home page');
 });
+
+
+//Error Middleware
+app.use(errorHandler);
 
 //Connecting
 const PORT = process.env.PORT || 5000;
