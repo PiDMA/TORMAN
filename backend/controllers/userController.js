@@ -1,6 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const User = require('../models/userModel');
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt")
 
 const generateToken = (id) => {
@@ -29,7 +29,7 @@ const registerUser = asyncHandler(async (req, res) => {
     const userExists = await User.findOne({email})
 
     //Generating secure token to stay signed in
-
+    
     if(userExists){
         res.status(400)
         throw new Error("Email is already in use. Please Log in")
@@ -46,7 +46,8 @@ const registerUser = asyncHandler(async (req, res) => {
         password: hashedPassword
     })
 
-    const token = generateToken(user.id);
+    //Generating token
+    const token = generateToken(user._id);
 
     //Send http-only cookie
     if(passwordIsCorrect){
@@ -107,7 +108,39 @@ const loginUser = asyncHandler(async (req, res) => {
     }
 })
 
+//Logout User
+const logoutUser = asyncHandler(async (req, res) => {
+    res.cookie("token", "", {
+        path: "/",
+        httpOnly: true,
+        expires: new Date(0), //aka one day
+        sameSite: "none",
+        secure: true
+    })
+    res.status(200).json({
+        message: "Logged out"
+    })
+})
+
+//Get User
+// const getUser = asyncHandler(async (req, res) => {
+//     const user = await User.findById(req.user._id)
+//     if(user){
+//         const {_id, name, email} = user
+//         res.status(200).json({
+//             _id,
+//             name,
+//             email
+//         })
+//     } else{
+//         res.status(404)
+//         throw new Error("User not found")
+//     }
+// })
+
 module.exports = {
     registerUser,
-    loginUser
+    loginUser,
+    logoutUser,
+    // getUser
 }

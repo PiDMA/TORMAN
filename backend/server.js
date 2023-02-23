@@ -9,6 +9,7 @@ const cookieParser = require("cookie-parser")
 
 //routes
 const userRoute = require('./routes/userRoute');
+const productRoute = require('./routes/productRoute');
 
 
 //Middlewares
@@ -19,6 +20,7 @@ app.use(bodyParser.json())
 
 //Routes middleware
 app.use("/api/users", userRoute)
+app.use("/api/products", productRoute)
 
 //Routes
 app.get('/', (req, res) => {
