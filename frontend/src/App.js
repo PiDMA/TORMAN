@@ -7,12 +7,16 @@ import Home from './pages/Home/Home';
 import Sidebar from './components/sidebar/Sidebar';
 import Layout from "./components/layout/Layout";
 import Dashboard from './pages/dashboard/Dashboard';
+import axios from 'axios';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-
+axios.defaults.withCredentials = true;
 
 function App() {
   return (
     <BrowserRouter>
+    <ToastContainer />
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login />} />
@@ -26,6 +30,8 @@ function App() {
           </Sidebar>
         }>
         </Route>
+
+
         {/* below not implemented */}
         <Route path='/forgot' element={<Forgot />} />
         <Route path='/reset' element={<Reset />} />
