@@ -10,6 +10,7 @@ import Dashboard from './pages/dashboard/Dashboard';
 import axios from 'axios';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import AddProduct from './pages/addProducts/AddProduct';
 
 axios.defaults.withCredentials = true;
 
@@ -31,6 +32,16 @@ function App() {
         }>
         </Route>
 
+        <Route
+          path="/add-product"
+          element={
+            <Sidebar>
+              <Layout>
+                <AddProduct />
+              </Layout>
+            </Sidebar>
+          }
+        />
 
         {/* below not implemented */}
         <Route path='/forgot' element={<Forgot />} />
